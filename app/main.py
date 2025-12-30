@@ -16,7 +16,6 @@ async def forward_to_ai_studio(payload: Dict[str, Any]):
             return {"ok": True, "ai_studio_response": resp.json()}
         except httpx.HTTPError as e:
             return {"ok": False, "error": str(e)}
-from __future__ import annotations
 from fastapi import FastAPI, Request, HTTPException, Depends
 from datetime import datetime
 from typing import Any, Dict, List, Optional
