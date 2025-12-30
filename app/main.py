@@ -1,39 +1,42 @@
 
-from __future__ import annotations
 import os
 import httpx
-from fastapi import FastAPI, Request, HTTPException, Depends
-from datetime import datetime
-from typing import Any, Dict, List, Optional
-from uuid import uuid4
-import secrets
-from sqlmodel import Session
-from .db import get_engine
-from .models import Message
-from pydantic import BaseModel
+from fastapi import FastAPI, Request, HTTPException
 
 app = FastAPI()
-engine = get_engine()
 
-# Example: Forward transcript to AI Studio app
-AI_STUDIO_URL = os.getenv("AI_STUDIO_URL", "https://your-ai-studio-app/api/endpoint")
+@app.get("/health")
+def health():
+    return {"ok": True}
+
+@app.get("/version")
+def version():
+    return {"service": "omi-bridge", "version": os.getenv("GIT_SHA", "dev")}
 
 @app.post("/forward-to-ai-studio")
-async def forward_to_ai_studio(payload: Dict[str, Any]):
+async def forward_to_ai_studio(request: Request):
     """
-    Forwards the incoming payload to the AI Studio app and returns its response.
+    Forwards whatever JSON body we receive to your AI Studio endpoint.
+    Set AI_STUDIO_URL in Railway variables, e.g. https://your-ai-studio-endpoint/whatever
     """
-    async with httpx.AsyncClient() as client:
-        try:
-            resp = await client.post(AI_STUDIO_URL, json=payload)
-            resp.raise_for_status()
-            return {"ok": True, "ai_studio_response": resp.json()}
-        except httpx.HTTPError as e:
-            return {"ok": False, "error": str(e)}
+    ai_url = os.getenv("AI_STUDIO_URL")
+    if not ai_url:
+        raise HTTPException(status_code=500, detail="Missing AI_STUDIO_URL env var")
 
-# --- Transcript API ---
-class TranscriptIn(BaseModel):
-    transcript: str
+    payload = await request.json()
+
+    timeout = httpx.Timeout(30.0)
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        r = await client.post(ai_url, json=payload)
+        # Bubble up downstream errors with context
+        if r.status_code >= 400:
+            raise HTTPException(status_code=502, detail={"downstream_status": r.status_code, "downstream_body": r.text})
+
+    # If downstream returns JSON, pass it through; otherwise pass text
+    try:
+        return r.json()
+    except Exception:
+        return {"ok": True, "downstream_text": r.text}
     deviceType: str = "Unknown"
     session_id: str = "frontend"
     speaker: str = "agent"
