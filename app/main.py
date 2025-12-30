@@ -1,3 +1,43 @@
+from .models import Client
+# --- Client Profiles API ---
+@app.get("/api/clients")
+def get_clients():
+    """Return all client profiles for search/listing."""
+    with Session(engine) as session:
+        clients = session.query(Client).all()
+        return [client.dict() for client in clients]
+import base64
+EVENTS: List[Dict[str, Any]] = []
+
+@app.post("/webhook")
+async def webhook(request: Request):
+    ct = (request.headers.get("content-type") or "").lower()
+
+    # 1) If it's JSON, treat it as transcript/event data
+    if "application/json" in ct:
+        data: Dict[str, Any] = await request.json()
+        EVENTS.append({"type": "json", "data": data})
+        return {"ok": True, "received": "json"}
+
+    # 2) Otherwise treat it as raw audio bytes (octet-stream / audio/*)
+    raw = await request.body()
+
+    # Store only metadata (recommended) to avoid massive memory usage
+    EVENTS.append({
+        "type": "audio",
+        "content_type": ct,
+        "bytes": len(raw),
+    })
+
+    # If you REALLY want to store the bytes for debugging, uncomment this (careful: memory!)
+    # EVENTS.append({
+    #     "type": "audio",
+    #     "content_type": ct,
+    #     "bytes": len(raw),
+    #     "b64": base64.b64encode(raw[:2000]).decode("ascii")  # only first 2KB
+    # })
+
+    return {"ok": True, "received": "audio", "bytes": len(raw), "content_type": ct}
 
 
 import os
