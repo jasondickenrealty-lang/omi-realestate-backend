@@ -1,3 +1,5 @@
+
+from __future__ import annotations
 import httpx
 # Example: Forward transcript to AI Studio app
 AI_STUDIO_URL = os.getenv("AI_STUDIO_URL", "https://your-ai-studio-app/api/endpoint")
