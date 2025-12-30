@@ -4,7 +4,7 @@ import os
 import httpx
 from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseModel
-from typing import Optional, Any, Dict
+from typing import Optional, Any, Dict, List
 
 
 app = FastAPI()
