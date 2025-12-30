@@ -2,6 +2,19 @@
 from __future__ import annotations
 import os
 import httpx
+from fastapi import FastAPI, Request, HTTPException, Depends
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+from uuid import uuid4
+import secrets
+from sqlmodel import Session
+from .db import get_engine
+from .models import Message
+from pydantic import BaseModel
+
+app = FastAPI()
+engine = get_engine()
+
 # Example: Forward transcript to AI Studio app
 AI_STUDIO_URL = os.getenv("AI_STUDIO_URL", "https://your-ai-studio-app/api/endpoint")
 
@@ -17,25 +30,8 @@ async def forward_to_ai_studio(payload: Dict[str, Any]):
             return {"ok": True, "ai_studio_response": resp.json()}
         except httpx.HTTPError as e:
             return {"ok": False, "error": str(e)}
-from fastapi import FastAPI, Request, HTTPException, Depends
-from datetime import datetime
-from typing import Any, Dict, List, Optional
-from uuid import uuid4
-import os
-import secrets
-
-
-from sqlmodel import Session
-from .db import get_engine
-from .models import Message
-
-
-app = FastAPI()
-engine = get_engine()
 
 # --- Transcript API ---
-from pydantic import BaseModel
-
 class TranscriptIn(BaseModel):
     transcript: str
     deviceType: str = "Unknown"
