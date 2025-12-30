@@ -1,4 +1,14 @@
+
+import os
+import httpx
+import base64
+from fastapi import FastAPI, Request, HTTPException
+from pydantic import BaseModel
+from typing import Optional, Any, Dict, List
 from .models import Client
+
+app = FastAPI()
+
 # --- Client Profiles API ---
 @app.get("/api/clients")
 def get_clients():
@@ -6,7 +16,7 @@ def get_clients():
     with Session(engine) as session:
         clients = session.query(Client).all()
         return [client.dict() for client in clients]
-import base64
+
 EVENTS: List[Dict[str, Any]] = []
 
 @app.post("/webhook")
