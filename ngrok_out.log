@@ -1,0 +1,13 @@
+t=2025-12-25T20:43:18-0600 lvl=info msg="no configuration paths supplied"
+t=2025-12-25T20:43:18-0600 lvl=info msg="using configuration at default config path" path=C:\\Users\\jason\\AppData\\Local/ngrok/ngrok.yml
+t=2025-12-25T20:43:18-0600 lvl=info msg="open config file" path=C:\\Users\\jason\\AppData\\Local\\ngrok\\ngrok.yml err=nil
+t=2025-12-25T20:43:18-0600 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+t=2025-12-25T20:43:18-0600 lvl=info msg="update available" obj=updater
+t=2025-12-25T20:43:18-0600 lvl=info msg="client session established" obj=tunnels.session
+t=2025-12-25T20:43:18-0600 lvl=info msg="tunnel session started" obj=tunnels.session
+t=2025-12-25T20:43:18-0600 lvl=eror msg="session closing" obj=tunnels.session err="failed to start tunnel: Only paid plans may create endpoints with custom subdomains.\nFailed to create an endpoint with the custom subdomain 'ngrok-free.app' for the account 'Jason Dicken'.\nThis account is on the 'Free' plan.\n\nUpgrade to a paid plan at: https://dashboard.ngrok.com/billing/choose-a-plan\r\n\r\nERR_NGROK_313\r\n"
+t=2025-12-25T20:43:18-0600 lvl=info msg="accept failed" obj=tunnels.session obj=csess id=e27c51e7286c err="reconnecting session closed"
+t=2025-12-25T20:43:18-0600 lvl=info msg="received stop request" obj=app stopReq="{err:{Inner:{Inner:0xc0003acd90}} restart:false}"
+t=2025-12-25T20:43:18-0600 lvl=eror msg="terminating with error" obj=app err="failed to start tunnel: Only paid plans may create endpoints with custom subdomains.\nFailed to create an endpoint with the custom subdomain 'ngrok-free.app' for the account 'Jason Dicken'.\nThis account is on the 'Free' plan.\n\nUpgrade to a paid plan at: https://dashboard.ngrok.com/billing/choose-a-plan\r\n\r\nERR_NGROK_313\r\n"
+t=2025-12-25T20:43:18-0600 lvl=info msg="no more state changes" obj=tunnels.session
+t=2025-12-25T20:43:18-0600 lvl=crit msg="command failed" err="failed to start tunnel: Only paid plans may create endpoints with custom subdomains.\nFailed to create an endpoint with the custom subdomain 'ngrok-free.app' for the account 'Jason Dicken'.\nThis account is on the 'Free' plan.\n\nUpgrade to a paid plan at: https://dashboard.ngrok.com/billing/choose-a-plan\r\n\r\nERR_NGROK_313\r\n"

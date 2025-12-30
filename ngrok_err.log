@@ -1,0 +1,9 @@
+ERROR:  failed to start tunnel: Only paid plans may create endpoints with custom subdomains.
+ERROR:  Failed to create an endpoint with the custom subdomain 'ngrok-free.app' for the account 'Jason Dicken'.
+ERROR:  This account is on the 'Free' plan.
+ERROR:  
+ERROR:  Upgrade to a paid plan at: https://dashboard.ngrok.com/billing/choose-a-plan
+ERROR:  
+ERROR:  ERR_NGROK_313
+ERROR:  https://ngrok.com/docs/errors/err_ngrok_313
+ERROR:  
