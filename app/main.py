@@ -1,9 +1,20 @@
 
+
 import os
 import httpx
 from fastapi import FastAPI, Request, HTTPException
+from pydantic import BaseModel
+from typing import Optional, Any, Dict
+
 
 app = FastAPI()
+
+# Pydantic model for transcript
+class TranscriptIn(BaseModel):
+    text: str
+    session_id: Optional[str] = None
+    source: Optional[str] = None
+    meta: Optional[Dict[str, Any]] = None
 
 @app.get("/health")
 def health():
